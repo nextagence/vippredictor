@@ -175,38 +175,45 @@
       }
     }
 
-    function generateSignal(game){
-      signalText.textContent = `🎯 ${game}`;
+   function generateSignal(game) {
+  signalText.textContent = `🎯 ${game}`;
+  signalValue.className = '';
+  minesBoard.style.display = 'none';
+  signalValue.textContent = '';
 
-      if(game === 'Mines'){
-        signalValue.className = 'mines';
-        signalValue.textContent = 'Safe moves generated';
-        generateMinesBoard();
-        return;
-      }
+  // 🧩 MINES — без коэффициента, только безопасные клетки
+  if (game === 'Mines') {
+    signalValue.className = 'mines';
+    signalValue.textContent = 'Safe moves generated';
+    generateMinesBoard();
+    return;
+  }
 
-      if(game === 'Penalty'){
-        const directions = ["Top Left","Top Right","Center","Bottom Left","Bottom Right"];
-        const dir = directions[Math.floor(Math.random()*directions.length)];
-        signalValue.className = 'penalty';
-        signalValue.textContent = dir;
-        minesBoard.style.display = 'none';
-        return;
-      }
+  // ⚽ PENALTY — только направление удара
+  if (game === 'Penalty') {
+    const directions = ["Top Left", "Top Right", "Center", "Bottom Left", "Bottom Right"];
+    const dir = directions[Math.floor(Math.random() * directions.length)];
+    signalValue.className = 'penalty';
+    signalValue.textContent = `Kick → ${dir}`;
+    return;
+  }
 
-      if(game === 'Chicken Road'){
-        const prediction = getChickenPrediction();
-        signalValue.className = 'aviator';
-        signalValue.textContent = prediction;
-        minesBoard.style.display = 'none';
-        return;
-      }
+  // 🐔 CHICKEN ROAD — коэффициенты по уровням сложности
+  if (game === 'Chicken Road') {
+    const prediction = getChickenPrediction();
+    signalValue.className = 'aviator';
+    signalValue.textContent = prediction;
+    return;
+  }
 
-      const multiplier = 'x' + randomMultiplier();
-      signalValue.className = 'aviator';
-      signalValue.textContent = multiplier;
-      minesBoard.style.display = 'none';
-    }
+  // ✈️ AVIATOR — случайный коэффициент
+  if (game === 'Aviator') {
+    const multiplier = 'x' + randomMultiplier();
+    signalValue.className = 'aviator';
+    signalValue.textContent = multiplier;
+    return;
+  }
+}
 
     function startSignals(){
       const selected = document.querySelector('input[name="game"]:checked');
@@ -220,7 +227,7 @@
       const bar = progress.querySelector('.bar');
       bar.style.animation = 'none';
       void bar.offsetWidth;
-      bar.style.animation = 'fill 2.4s linear forwards';
+      bar.style.animation = 'fill 1.4s linear forwards';
       setTimeout(()=>{
         progress.style.display = 'none';
         startSignals();
